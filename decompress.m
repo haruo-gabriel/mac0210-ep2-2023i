@@ -47,8 +47,8 @@ function decompress(compressedImg, method, k, h)
         endfor 
       endfor
 
-      imwrite(uint8(I_decompressed), 'decompressed-bilinear.png', 'Quality', 100);
-      %imwrite(uint8(I_decompressed), 'decompressed.png', 'Quality', 100);
+      %imwrite(uint8(I_decompressed), 'decompressed-bilinear.png', 'Quality', 100);
+      imwrite(uint8(I_decompressed), 'decompressed.png', 'Quality', 100);
 
     case 2 % bicúbica
       B = [1 0 0 0 ;
@@ -115,8 +115,8 @@ function decompress(compressedImg, method, k, h)
         endfor 
       endfor
 
-      imwrite(uint8(I_decompressed), 'decompressed-bicubica.png', 'Quality', 100);
-      %imwrite(uint8(I_decompressed), 'decompressed.png', 'Quality', 100);
+      %imwrite(uint8(I_decompressed), 'decompressed-bicubica.png', 'Quality', 100);
+      imwrite(uint8(I_decompressed), 'decompressed.png', 'Quality', 100);
 
     otherwise
       error('Método inválido. Use 1 para bilinear ou 2 para bicúbica.');

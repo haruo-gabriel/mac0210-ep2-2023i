@@ -15,9 +15,48 @@
 \begin{document}
 \maketitle
 
+\section{Implementação}
+
+A seguir serão explicitados alguns pontos na implementação das 
+\textit{function files} requisitadas.
+
+\subsection{compress}
+
+A função \texttt{compress.m} é a mais simples entre as três. Pega-se o
+tamanho da imagem de entrada e cria-se uma máscara que filtra todas as
+colunas e linhas, de 1 a $p$, múltiplas de $k+1$. Essa máscara é aplicada
+na matriz da imagem original, resultando em uma comprimida.
+
+\subsection{decompress}
+
+Na função \texttt{decompress.m}, foram seguidas as instruções do enunciado
+para os métodos bilinear e bicúbico (todas as matrizes coeficientes,
+derivadas parciais, etc). Os casos das bordas foi lidado facilmente com alguns
+\texttt{if statements}. Além disso, foram criadas funções auxiliares que
+calculam derivadas parciais.
+
+Em ambos os métodos, itera-se pelas linhas e colunas. Para cada pixel,
+é calculada uma matriz de coeficientes (a matriz mais computacionalmente
+custosa é para o método bicúbico), além de uma iteração ao redor do pixel
+mencionado anteriormente.
+
+\subsection{calculateError}
+
+Na função \texttt{calculateError.m}, foi seguido exatamente o requisitado.
+Itera-se pelas linhas, colunas, e para cada pixel, há o cálculo do erro de
+cada canal RGB. 
+
+\subsection{Conclusão}
+
+Em termos gerais, os algoritmos de processamento de imagem em Octave são
+custosos e demorados em tempo de execução. Isto pois o cálculo de matrizes
+é computacionalmente exigente. Não obstante, os resultados são espetaculares
+para os olhos. 
+
 \section{Experimentos}
 
-A seguir, serão apresentados os experimentos com diversas funções, algumas de classe $C^2$ e outras não necessariamente.
+A seguir, serão apresentados os experimentos com diversas funções,
+algumas de classe $C^2$ e outras não necessariamente.
 
 \subsection{Funções senoidais} \label{subsec:funcoesSenoidais}
 
@@ -41,7 +80,7 @@ Isto pois a imagem de cada função da equação \ref{eq:funcaoSenoidalAntes}
 então o fator de conversão é somar $1$ e multiplicar por
 $255/2$.
 
-\subsubsection[Usando h=1]{Usando $h=1$}
+\subsubsection[Usando h=1]{Usando $h=1$} \label{subsubsec:senoidal-h=1}
 Usando $k=3$ e $h=1$, as imagens resultantes foram
 
 \begin{figure}[ht]
@@ -72,9 +111,8 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
   \caption{Imagem original (1024 pixels), comprimida (256 pixels) e descomprimidas (1024 pixels)}
 \end{figure}
 
-e os erros foram 0.16470 para bilinear e 0.016539 para bicúbica.
-
-\newpage
+e os erros foram 0.016470 para bilinear e 0.016539 para bicúbica. Erros
+semelhantes.
 
 \subsubsection[Usando h=10]{Usando $h=10$}
 
@@ -109,11 +147,16 @@ Usando $k=3$ e $h=10$, as imagens resultantes foram
 \end{figure}
 
 e os erros foram 0.016470 para bilinear e 0.025466 para bicúbica.
-
 \subsubsection{Observações}
 
 Note que a equação \ref{eq:funcaoSenoidalDepois} é de classe $C^2$,
-e portanto, a compressão e descompressão se comportam com erros baixos.
+e portanto, a compressão e descompressão se comportam com erros relativamente
+baixos, com 2 casas decimais.
+Entretanto,  houve um salto entre a diferença dos erros bilinear e bicúbico
+para $h=10$ e $h=1$. O delta na seção \ref{subsubsec:senoidal-h=1} é igual a 
+$|0.016470 - 0.016539| = 0.000069$, enquanto nessa é $|0.016470 - 0.025466|
+= 0.008996$.
+
 
 \subsection{Funções polinomiais simples}
 
@@ -154,9 +197,9 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
   \caption{Imagem original (1024 pixels), comprimida (256 pixels) e descomprimidas (1024 pixels)}
 \end{figure}
 
-e os erros foram 0.025576 para bilinear e 0.025724 para bicúbica.
-
 \newpage
+
+e os erros foram 0.025576 para bilinear e 0.025724 para bicúbica.
 
 \subsubsection[Usando h=10]{Usando $h=10$}
 
@@ -242,8 +285,10 @@ Usando $k=3$ e $h=7$, as imagens resultantes foram
   \end{subfigure}
   \caption{Imagem original (1024 pixels), comprimida (256 pixels) e descomprimidas (1024 pixels)}
 \end{figure}
-
+\newpage
 e os erros foram 0.423 para bilinear e 0.423 para bicúbica.
+
+\subsubsection{Observações}
 
 Note que foram geradas imagens totalmente pretas na compressão e descompressão.
 Sendo breve, o processo não funciona bem para imagens binárias, pretas e brancas,
@@ -255,6 +300,7 @@ A função
 \begin{equation}
   f(x,y) = \Biggl( 255 \dfrac{x}{1024} , 255 \dfrac{y}{1024}, 1 \Biggr)
 \end{equation}
+gera um gradiente linear.
 
 \subsubsection[Usando h=1]{Usando $h=1$}
 
@@ -288,6 +334,9 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
   \caption{Imagem original (1024 pixels), comprimida (256 pixels) e descomprimidas (1024 pixels)}
 \end{figure}
 e os erros foram 2.6067e-03 para bilinear e 2.6067e-03 para bicúbica.
+
+\subsubsection{Observações}
+
 São erros bem mais baixos comparado às outras funções, e perceptível na
 nitidez das imagens.
 
@@ -307,6 +356,9 @@ A função
   \Biggr) &\text{ caso contrário}
   \end{cases}
 \end{equation}
+gera uma imagem com uma divisão arredondada, característica de funções senoidais.
+
+Obs.: $p$ é a largura (ou altura) da imagem original.
 
 \subsubsection[Usando h=1]{Usando $h=1$}
 
@@ -340,6 +392,8 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
   \caption{Imagem original (1024 pixels), comprimida (256 pixels) e descomprimidas (1024 pixels)}
 \end{figure}
 e os erros foram 4.7175e-03 para bilinear e 4.5450e-03 para bicúbica.
+
+\subsubsection{Observações}
 
 A imagem original é linda, e os erros também são lindamente baixos. Mesmo uma
 das funções não ser necessariamente de classe $C^1$ em todos os pontos
@@ -411,14 +465,14 @@ foram equivalentes.
 
 \section{Experimentos com imagens reais}
 
-Vamos experimentar com imagens reais agora.
+Vamos finalmente experimentar com imagens reais agora!
 
 \subsection{NOT TiGHT by DOMi \& JD BECK}
 \label{subsec:nottight}
 
-Álbum sensacional de jazz. DOMi e JD BECK são prodígios da música e
-juntos com certeza terão um futuro excepcional na música. Vale a
-pena conferir.
+Álbum sensacional de jazz contemporâneo. DOMi e JD BECK são prodígios
+da música e juntos com certeza terão um futuro excepcional no segmento.
+Vale a pena conferir.
 
 A capa é colorida e rica em detalhes.
 
@@ -453,9 +507,10 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
 \end{figure}
 
 e os erros foram 0.069800 para bilinear e 0.072539 para bicúbica.
+
 Como há muitos detalhes na imagem original, é possível ver o
 granulado na compressão e descompressões. Entretanto, o erro foi
-relativamente baixo, abaixo de 1 casa decimal.
+relativamente baixo, relativo a 2 casas decimais.
 
 \subsection{Led Zeppelin I by Led Zeppelin}
 
@@ -495,10 +550,11 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
 \end{figure}
 
 e os erros foram 0.1726 para bilinear e 0.1796 para bicúbica.
+
 Ao contrário da capa de \ref{subsec:nottight}, esta é originalmente
-granulada, então o efeito de granulação da compressão/descompressão é
-menos perceptível.Além disso, o erro foi alto em comparação ao último,
-maior que 1 casa decimal.
+granulada, então o efeito de granulação da compressão e descompressão é
+menos perceptível. Além disso, o erro foi alto em comparação ao último,
+este relativo a 1 casa decimal.
 
 \subsection{Deep in View by Cola}
 
@@ -539,8 +595,16 @@ Usando $k=3$ e $h=1$, as imagens resultantes foram
 \end{figure}
 
 e os erros foram 0.1583 para bilinear e 0.1623 para bicúbica.
-É visível a piora de definição e quadriculação de todas as bordas.
-Os erros também superaram 1 casa decimal.
 
+É perceptível a piora de definição e quadriculação de todas as bordas.
+Os erros também estão relativos a 1 casa decimal.
+
+\section{Conclusão geral}
+
+Manipulação de imagens é uma tarefa custosa em quesito de processamento
+computacional. Contudo, os métodos e a teoria numérica revelam maneiras
+inteligentes para otimizar algoritmos. Uma curiosidade que estou levando
+na disciplina é a codificação de algoritmos para GPUs. Quais serão as 
+diferenças? Essas questões não serão respondidas agora, infelizmente.
 
 \end{document}
