@@ -1,0 +1,15 @@
+# ignore latex compilation files
+**/*.aux
+**/*.bbl
+**/*.blg
+**/*.log
+**/*.out
+**/*.synctex.gz
+**/*.toc
+**/*.lot
+**/*.lof
+**/*.gz
+**/*.fdb_latexmk
+**/*.fls
+**/*.pdfsync
+**/*.dvi
